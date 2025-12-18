@@ -6,12 +6,13 @@ QBCore = nil
 Framework = nil
 
 -- Localization
-Locales = {}
 function _U(str, ...) 
-    if Locales[Config.DefaultLanguage] and Locales[Config.DefaultLanguage][str] then
-        return string.format(Locales[Config.DefaultLanguage][str], ...)
+    -- Safe fallback if Config or Locales not loaded yet
+    local lang = Config and Config.DefaultLanguage or 'de'
+    if Locales and Locales[lang] and Locales[lang][str] then
+        return string.format(Locales[lang][str], ...)
     else
-        return 'Translation [' .. Config.DefaultLanguage .. '][' .. str .. '] not found'
+        return 'Translation [' .. lang .. '][' .. str .. '] not found'
     end
 end
 
