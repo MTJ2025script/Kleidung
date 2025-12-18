@@ -134,6 +134,16 @@ Config.SaveSkinOnChange = true -- Auto-save skin when changing clothes
 Config.LoadSkinOnSpawn = true -- Auto-load player skin on spawn
 Config.EnableCharacterCreation = true -- Enable character creation for new players
 
+-- Quick Commands (Schnellzugriff für Accessoires)
+Config.UseMaskCommand = true -- /maske zum An/Ausziehen der Maske
+Config.MaskCommandName = 'maske'
+Config.UseHelmetCommand = true -- /helm zum An/Ausziehen des Helms
+Config.HelmetCommandName = 'helm'
+Config.UseGlassesCommand = true -- /brille zum An/Ausziehen der Brille
+Config.GlassesCommandName = 'brille'
+Config.UseVestCommand = true -- /weste für kugelsichere Weste
+Config.VestCommandName = 'weste'
+
 -- Default Skin for New Players
 Config.DefaultSkin = {
     male = {

@@ -175,40 +175,55 @@ function DrawText3D(coords, text)
     end
 end
 
--- Get current clothing
+-- Get current clothing (COMPLETE ESX_SKIN IMPLEMENTATION)
 function GetCurrentClothing()
     local playerPed = PlayerPedId()
     local clothing = {}
     
-    clothing['tshirt_1'] = GetPedDrawableVariation(playerPed, 8)
+    -- Drawable Components (Kleidungsstücke)
+    clothing['tshirt_1'] = GetPedDrawableVariation(playerPed, 8)    -- Unterhemd
     clothing['tshirt_2'] = GetPedTextureVariation(playerPed, 8)
-    clothing['torso_1'] = GetPedDrawableVariation(playerPed, 11)
+    clothing['torso_1'] = GetPedDrawableVariation(playerPed, 11)    -- Oberteil/Jacke
     clothing['torso_2'] = GetPedTextureVariation(playerPed, 11)
-    clothing['decals_1'] = GetPedDrawableVariation(playerPed, 10)
+    clothing['decals_1'] = GetPedDrawableVariation(playerPed, 10)   -- Abzeichen/Patches
     clothing['decals_2'] = GetPedTextureVariation(playerPed, 10)
-    clothing['arms'] = GetPedDrawableVariation(playerPed, 3)
-    clothing['pants_1'] = GetPedDrawableVariation(playerPed, 4)
+    clothing['arms'] = GetPedDrawableVariation(playerPed, 3)        -- Arme/Ärmel
+    clothing['pants_1'] = GetPedDrawableVariation(playerPed, 4)     -- Hose
     clothing['pants_2'] = GetPedTextureVariation(playerPed, 4)
-    clothing['shoes_1'] = GetPedDrawableVariation(playerPed, 6)
+    clothing['shoes_1'] = GetPedDrawableVariation(playerPed, 6)     -- Schuhe
     clothing['shoes_2'] = GetPedTextureVariation(playerPed, 6)
-    clothing['helmet_1'] = GetPedPropIndex(playerPed, 0)
-    clothing['helmet_2'] = GetPedPropTextureIndex(playerPed, 0)
-    clothing['chain_1'] = GetPedDrawableVariation(playerPed, 7)
+    clothing['chain_1'] = GetPedDrawableVariation(playerPed, 7)     -- Kette/Halskette
     clothing['chain_2'] = GetPedTextureVariation(playerPed, 7)
-    clothing['ears_1'] = GetPedPropIndex(playerPed, 2)
-    clothing['ears_2'] = GetPedPropTextureIndex(playerPed, 2)
-    clothing['bags_1'] = GetPedDrawableVariation(playerPed, 5)
+    clothing['bags_1'] = GetPedDrawableVariation(playerPed, 5)      -- Tasche/Rucksack
     clothing['bags_2'] = GetPedTextureVariation(playerPed, 5)
-    clothing['glasses_1'] = GetPedPropIndex(playerPed, 1)
+    clothing['mask_1'] = GetPedDrawableVariation(playerPed, 1)      -- Maske/Gesicht
+    clothing['mask_2'] = GetPedTextureVariation(playerPed, 1)
+    clothing['bproof_1'] = GetPedDrawableVariation(playerPed, 9)    -- Kugelsichere Weste
+    clothing['bproof_2'] = GetPedTextureVariation(playerPed, 9)
+    
+    -- Props/Accessories (Accessoires)
+    clothing['helmet_1'] = GetPedPropIndex(playerPed, 0)            -- Helm/Hut
+    clothing['helmet_2'] = GetPedPropTextureIndex(playerPed, 0)
+    clothing['glasses_1'] = GetPedPropIndex(playerPed, 1)           -- Brille
     clothing['glasses_2'] = GetPedPropTextureIndex(playerPed, 1)
+    clothing['ears_1'] = GetPedPropIndex(playerPed, 2)              -- Ohren/Kopfhörer
+    clothing['ears_2'] = GetPedPropTextureIndex(playerPed, 2)
+    clothing['watches_1'] = GetPedPropIndex(playerPed, 6)           -- Uhr
+    clothing['watches_2'] = GetPedPropTextureIndex(playerPed, 6)
+    clothing['bracelets_1'] = GetPedPropIndex(playerPed, 7)         -- Armband
+    clothing['bracelets_2'] = GetPedPropTextureIndex(playerPed, 7)
+    
+    -- Sex/Gender (Geschlecht für korrekte Kleidung)
+    clothing['sex'] = IsPedMale(playerPed) and 0 or 1
     
     return clothing
 end
 
--- Apply clothing
+-- Apply clothing (COMPLETE ESX_SKIN IMPLEMENTATION)
 function ApplyClothing(clothing)
     local playerPed = PlayerPedId()
     
+    -- Drawable Components (Alle Kleidungsstücke)
     if clothing['tshirt_1'] then SetPedComponentVariation(playerPed, 8, clothing['tshirt_1'], clothing['tshirt_2'] or 0, 2) end
     if clothing['torso_1'] then SetPedComponentVariation(playerPed, 11, clothing['torso_1'], clothing['torso_2'] or 0, 2) end
     if clothing['decals_1'] then SetPedComponentVariation(playerPed, 10, clothing['decals_1'], clothing['decals_2'] or 0, 2) end
@@ -217,7 +232,10 @@ function ApplyClothing(clothing)
     if clothing['shoes_1'] then SetPedComponentVariation(playerPed, 6, clothing['shoes_1'], clothing['shoes_2'] or 0, 2) end
     if clothing['chain_1'] then SetPedComponentVariation(playerPed, 7, clothing['chain_1'], clothing['chain_2'] or 0, 2) end
     if clothing['bags_1'] then SetPedComponentVariation(playerPed, 5, clothing['bags_1'], clothing['bags_2'] or 0, 2) end
+    if clothing['mask_1'] then SetPedComponentVariation(playerPed, 1, clothing['mask_1'], clothing['mask_2'] or 0, 2) end
+    if clothing['bproof_1'] then SetPedComponentVariation(playerPed, 9, clothing['bproof_1'], clothing['bproof_2'] or 0, 2) end
     
+    -- Props/Accessories (Alle Accessoires)
     if clothing['helmet_1'] and clothing['helmet_1'] ~= -1 then
         SetPedPropIndex(playerPed, 0, clothing['helmet_1'], clothing['helmet_2'] or 0, 2)
     else
@@ -234,6 +252,18 @@ function ApplyClothing(clothing)
         SetPedPropIndex(playerPed, 2, clothing['ears_1'], clothing['ears_2'] or 0, 2)
     else
         ClearPedProp(playerPed, 2)
+    end
+    
+    if clothing['watches_1'] and clothing['watches_1'] ~= -1 then
+        SetPedPropIndex(playerPed, 6, clothing['watches_1'], clothing['watches_2'] or 0, 2)
+    else
+        ClearPedProp(playerPed, 6)
+    end
+    
+    if clothing['bracelets_1'] and clothing['bracelets_1'] ~= -1 then
+        SetPedPropIndex(playerPed, 7, clothing['bracelets_1'], clothing['bracelets_2'] or 0, 2)
+    else
+        ClearPedProp(playerPed, 7)
     end
 end
 
@@ -491,6 +521,151 @@ end
 if Config.EnableSkinSystem and Config.UseSkinCommand then
     RegisterCommand(Config.SkinCommandName, function()
         OpenClothingMenu(true) -- Skip shop check
+    end, false)
+end
+
+-- Quick Commands für Accessoires
+if Config.UseMaskCommand then
+    local maskOn = false
+    local savedMask = {mask_1 = 0, mask_2 = 0}
+    
+    RegisterCommand(Config.MaskCommandName, function()
+        local playerPed = PlayerPedId()
+        
+        if maskOn then
+            -- Maske abnehmen
+            SetPedComponentVariation(playerPed, 1, 0, 0, 2)
+            maskOn = false
+            TriggerEvent('chat:addMessage', {
+                color = {0, 255, 0},
+                multiline = false,
+                args = {"Kleidung", "Maske abgenommen"}
+            })
+        else
+            -- Maske aufsetzen (letzte gespeicherte oder Standard)
+            local currentSkin = GetCurrentClothing()
+            if currentSkin['mask_1'] and currentSkin['mask_1'] > 0 then
+                savedMask = {mask_1 = currentSkin['mask_1'], mask_2 = currentSkin['mask_2']}
+            end
+            
+            if savedMask.mask_1 > 0 then
+                SetPedComponentVariation(playerPed, 1, savedMask.mask_1, savedMask.mask_2, 2)
+                maskOn = true
+                TriggerEvent('chat:addMessage', {
+                    color = {0, 255, 0},
+                    multiline = false,
+                    args = {"Kleidung", "Maske aufgesetzt"}
+                })
+            end
+        end
+    end, false)
+end
+
+if Config.UseHelmetCommand then
+    local helmetOn = false
+    local savedHelmet = {helmet_1 = -1, helmet_2 = 0}
+    
+    RegisterCommand(Config.HelmetCommandName, function()
+        local playerPed = PlayerPedId()
+        
+        if helmetOn then
+            -- Helm abnehmen
+            ClearPedProp(playerPed, 0)
+            helmetOn = false
+            TriggerEvent('chat:addMessage', {
+                color = {0, 255, 0},
+                multiline = false,
+                args = {"Kleidung", "Helm abgenommen"}
+            })
+        else
+            -- Helm aufsetzen
+            local currentSkin = GetCurrentClothing()
+            if currentSkin['helmet_1'] and currentSkin['helmet_1'] >= 0 then
+                savedHelmet = {helmet_1 = currentSkin['helmet_1'], helmet_2 = currentSkin['helmet_2']}
+            end
+            
+            if savedHelmet.helmet_1 >= 0 then
+                SetPedPropIndex(playerPed, 0, savedHelmet.helmet_1, savedHelmet.helmet_2, 2)
+                helmetOn = true
+                TriggerEvent('chat:addMessage', {
+                    color = {0, 255, 0},
+                    multiline = false,
+                    args = {"Kleidung", "Helm aufgesetzt"}
+                })
+            end
+        end
+    end, false)
+end
+
+if Config.UseGlassesCommand then
+    local glassesOn = false
+    local savedGlasses = {glasses_1 = -1, glasses_2 = 0}
+    
+    RegisterCommand(Config.GlassesCommandName, function()
+        local playerPed = PlayerPedId()
+        
+        if glassesOn then
+            -- Brille abnehmen
+            ClearPedProp(playerPed, 1)
+            glassesOn = false
+            TriggerEvent('chat:addMessage', {
+                color = {0, 255, 0},
+                multiline = false,
+                args = {"Kleidung", "Brille abgenommen"}
+            })
+        else
+            -- Brille aufsetzen
+            local currentSkin = GetCurrentClothing()
+            if currentSkin['glasses_1'] and currentSkin['glasses_1'] >= 0 then
+                savedGlasses = {glasses_1 = currentSkin['glasses_1'], glasses_2 = currentSkin['glasses_2']}
+            end
+            
+            if savedGlasses.glasses_1 >= 0 then
+                SetPedPropIndex(playerPed, 1, savedGlasses.glasses_1, savedGlasses.glasses_2, 2)
+                glassesOn = true
+                TriggerEvent('chat:addMessage', {
+                    color = {0, 255, 0},
+                    multiline = false,
+                    args = {"Kleidung", "Brille aufgesetzt"}
+                })
+            end
+        end
+    end, false)
+end
+
+if Config.UseVestCommand then
+    local vestOn = false
+    local savedVest = {bproof_1 = 0, bproof_2 = 0}
+    
+    RegisterCommand(Config.VestCommandName, function()
+        local playerPed = PlayerPedId()
+        
+        if vestOn then
+            -- Weste abnehmen
+            SetPedComponentVariation(playerPed, 9, 0, 0, 2)
+            vestOn = false
+            TriggerEvent('chat:addMessage', {
+                color = {0, 255, 0},
+                multiline = false,
+                args = {"Kleidung", "Weste abgenommen"}
+            })
+        else
+            -- Weste aufsetzen
+            local currentSkin = GetCurrentClothing()
+            if currentSkin['bproof_1'] and currentSkin['bproof_1'] > 0 then
+                savedVest = {bproof_1 = currentSkin['bproof_1'], bproof_2 = currentSkin['bproof_2']}
+            end
+            
+            if savedVest.bproof_1 > 0 then
+                SetPedComponentVariation(playerPed, 9, savedVest.bproof_1, savedVest.bproof_2, 2)
+                vestOn = true
+                TriggerEvent('chat:addMessage', {
+                    color = {0, 255, 0},
+                    multiline = false,
+                    args = {"Kleidung", "Weste angezogen"}
+                })
+            end
+        end
     end, false)
 end
 

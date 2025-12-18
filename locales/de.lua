@@ -80,4 +80,24 @@ Locales['de'] = {
     ['character_creation'] = 'Charaktererstellung',
     ['create_character'] = 'Erstelle deinen Charakter',
     ['skin_menu'] = 'Aussehen anpassen',
+    
+    -- Accessoires / Quick Commands
+    ['mask_on'] = 'Maske aufgesetzt',
+    ['mask_off'] = 'Maske abgenommen',
+    ['helmet_on'] = 'Helm aufgesetzt',
+    ['helmet_off'] = 'Helm abgenommen',
+    ['glasses_on'] = 'Brille aufgesetzt',
+    ['glasses_off'] = 'Brille abgenommen',
+    ['vest_on'] = 'Weste angezogen',
+    ['vest_off'] = 'Weste abgenommen',
+    ['no_mask'] = 'Keine Maske vorhanden',
+    ['no_helmet'] = 'Kein Helm vorhanden',
+    ['no_glasses'] = 'Keine Brille vorhanden',
+    ['no_vest'] = 'Keine Weste vorhanden',
+    
+    -- Alle Kleidungskategorien (Komplett)
+    ['category_mask'] = 'Maske',
+    ['category_vest'] = 'Kugelsichere Weste',
+    ['category_watches'] = 'Uhr',
+    ['category_bracelets'] = 'Armband',
 }
