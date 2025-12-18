@@ -69,6 +69,11 @@ CreateThread(function()
     -- Load outfits
     TriggerServerEvent('mtj_kleidung:server:loadOutfits')
     TriggerServerEvent('mtj_kleidung:server:getPlayerMoney')
+    
+    -- Load player skin if skin system is enabled
+    if Config.EnableSkinSystem and Config.LoadSkinOnSpawn then
+        TriggerServerEvent('mtj_kleidung:server:loadSkin')
+    end
 end)
 
 -- Update player data on job change
@@ -233,8 +238,9 @@ function ApplyClothing(clothing)
 end
 
 -- Open clothing menu
-function OpenClothingMenu()
-    if not InClothingShop then
+function OpenClothingMenu(skipShopCheck)
+    -- Allow opening anywhere if using skin command or skip check
+    if not skipShopCheck and not InClothingShop and not Config.UseSkinCommand then
         return
     end
     
@@ -352,6 +358,11 @@ RegisterNUICallback('closeMenu', function(data, cb)
         if Config.EnablePayment and not PendingPayment then
             -- Already paid or free
             ApplyClothing(CurrentClothing)
+            
+            -- Save skin to database if skin system is enabled
+            if Config.EnableSkinSystem and Config.SaveSkinOnChange then
+                TriggerServerEvent('mtj_kleidung:server:saveSkin', CurrentClothing)
+            end
         end
     else
         -- Revert changes
@@ -474,6 +485,65 @@ if Config.UseCommand then
             OpenClothingMenu()
         end
     end, false)
+end
+
+-- Skin command (open anywhere like esx_skin)
+if Config.EnableSkinSystem and Config.UseSkinCommand then
+    RegisterCommand(Config.SkinCommandName, function()
+        OpenClothingMenu(true) -- Skip shop check
+    end, false)
+end
+
+-- Skin System Event Handlers
+RegisterNetEvent('mtj_kleidung:client:loadSkin')
+AddEventHandler('mtj_kleidung:client:loadSkin', function(skin, isNewPlayer)
+    if isNewPlayer then
+        -- New player - open character creation menu
+        if Config.EnableCharacterCreation then
+            Wait(1000) -- Wait for player to fully spawn
+            
+            -- Apply default skin based on gender
+            local playerPed = PlayerPedId()
+            local isMale = IsPedMale(playerPed)
+            local defaultSkin = isMale and Config.DefaultSkin.male or Config.DefaultSkin.female
+            
+            ApplyClothing(defaultSkin)
+            
+            -- Open menu for customization
+            Wait(500)
+            OpenClothingMenu(true)
+        end
+    else
+        -- Existing player - load saved skin
+        if skin then
+            ApplyClothing(skin)
+            
+            -- Auto-save current skin if enabled
+            if Config.SaveSkinOnChange then
+                CurrentClothing = skin
+            end
+        end
+    end
+end)
+
+-- Save skin when clothing changes
+RegisterNetEvent('mtj_kleidung:client:saveSkin')
+AddEventHandler('mtj_kleidung:client:saveSkin', function()
+    if Config.EnableSkinSystem and Config.SaveSkinOnChange then
+        local currentSkin = GetCurrentClothing()
+        TriggerServerEvent('mtj_kleidung:server:saveSkin', currentSkin)
+    end
+end)
+
+-- Auto-save skin when applying changes
+local originalApplyClothing = ApplyClothing
+ApplyClothing = function(clothing)
+    originalApplyClothing(clothing)
+    
+    -- Auto-save if skin system is enabled
+    if Config.EnableSkinSystem and Config.SaveSkinOnChange and not MenuOpen then
+        TriggerServerEvent('mtj_kleidung:server:saveSkin', clothing)
+    end
 end
 
 print('[MTJ2024_Kleidung] ^2Client side loaded successfully^0')

@@ -8,6 +8,13 @@ Ein professionelles Kleidungsscript für FiveM RP-Server mit vollständiger ESX 
 
 ## 🌟 Features
 
+### ⭐ ESX_Skin Ersatz
+- ✅ **Vollständiger esx_skin Ersatz** - Kann esx_skin komplett ersetzen!
+- ✅ **Automatischer Start** - Öffnet beim Charakter-Spawn
+- ✅ **Charaktererstellung** - Für neue Spieler
+- ✅ **Skin-Persistenz** - Speichert Aussehen in Datenbank
+- ✅ **/skin Command** - Öffnet Menü überall (wie esx_skin)
+
 ### Kernfunktionen
 - ✅ **Kleidungsauswahl mit Live-Vorschau** - Sieh deine Änderungen in Echtzeit
 - ✅ **Outfit-Verwaltung** - Speichere und lade unbegrenzt viele Outfits
@@ -45,6 +52,23 @@ Ein professionelles Kleidungsscript für FiveM RP-Server mit vollständiger ESX 
 - Internetverbindung für NUI (Font Awesome & jQuery CDN)*
 
 **Hinweis:** Das Script nutzt externe CDNs für Font Awesome und jQuery. Für maximale Sicherheit und Offline-Fähigkeit können diese lokal gehostet werden.
+
+## 🔄 Als esx_skin Ersatz nutzen
+
+**Dieses Script kann esx_skin vollständig ersetzen!**
+
+Siehe **[ESX_SKIN_REPLACEMENT.md](ESX_SKIN_REPLACEMENT.md)** für:
+- Schritt-für-Schritt Anleitung
+- Migration von esx_skin
+- Konfiguration
+- Fehlerbehebung
+
+**Schnellstart:**
+1. Deaktiviere esx_skin in server.cfg
+2. Aktiviere mtj_kleidung
+3. Führe install.sql aus
+4. Setze `Config.EnableSkinSystem = true`
+5. Fertig! Script startet automatisch beim Charakter-Spawn
 
 ## 🚀 Installation
 

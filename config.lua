@@ -126,6 +126,44 @@ Config.JobDiscounts = {
     ['mechanic'] = 50, -- 50% discount
 }
 
+-- Skin/Character System (esx_skin replacement)
+Config.EnableSkinSystem = true -- Enable full skin system (replaces esx_skin)
+Config.UseSkinCommand = true -- Enable /skin command to open menu anywhere
+Config.SkinCommandName = 'skin' -- Command name
+Config.SaveSkinOnChange = true -- Auto-save skin when changing clothes
+Config.LoadSkinOnSpawn = true -- Auto-load player skin on spawn
+Config.EnableCharacterCreation = true -- Enable character creation for new players
+
+-- Default Skin for New Players
+Config.DefaultSkin = {
+    male = {
+        ['tshirt_1'] = 15, ['tshirt_2'] = 0,
+        ['torso_1'] = 0, ['torso_2'] = 0,
+        ['decals_1'] = 0, ['decals_2'] = 0,
+        ['arms'] = 0,
+        ['pants_1'] = 0, ['pants_2'] = 0,
+        ['shoes_1'] = 1, ['shoes_2'] = 0,
+        ['helmet_1'] = -1, ['helmet_2'] = 0,
+        ['chain_1'] = 0, ['chain_2'] = 0,
+        ['ears_1'] = -1, ['ears_2'] = 0,
+        ['bags_1'] = 0, ['bags_2'] = 0,
+        ['glasses_1'] = -1, ['glasses_2'] = 0
+    },
+    female = {
+        ['tshirt_1'] = 15, ['tshirt_2'] = 0,
+        ['torso_1'] = 0, ['torso_2'] = 0,
+        ['decals_1'] = 0, ['decals_2'] = 0,
+        ['arms'] = 0,
+        ['pants_1'] = 0, ['pants_2'] = 0,
+        ['shoes_1'] = 1, ['shoes_2'] = 0,
+        ['helmet_1'] = -1, ['helmet_2'] = 0,
+        ['chain_1'] = 0, ['chain_2'] = 0,
+        ['ears_1'] = -1, ['ears_2'] = 0,
+        ['bags_1'] = 0, ['bags_2'] = 0,
+        ['glasses_1'] = -1, ['glasses_2'] = 0
+    }
+}
+
 -- Performance Settings
 Config.UpdateInterval = 100 -- Update interval in ms for clothing changes
 Config.EnableDebug = false -- Enable debug messages

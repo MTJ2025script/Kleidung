@@ -328,4 +328,79 @@ AddEventHandler('mtj_kleidung:server:getPlayerJob', function()
     TriggerClientEvent('mtj_kleidung:client:receivePlayerJob', source, job)
 end)
 
+-- Skin System (esx_skin replacement)
+-- Load player skin from database
+RegisterNetEvent('mtj_kleidung:server:loadSkin')
+AddEventHandler('mtj_kleidung:server:loadSkin', function()
+    local source = source
+    local identifier = GetPlayerIdentifier(source)
+    
+    if not identifier then
+        print('[MTJ2024_Kleidung] ^1ERROR: Could not get identifier for player ' .. source .. '^0')
+        return
+    end
+    
+    MySQL.Async.fetchAll('SELECT skin FROM player_skin WHERE identifier = @identifier', {
+        ['@identifier'] = identifier
+    }, function(result)
+        if result and #result > 0 then
+            -- Player has saved skin
+            local skin = json.decode(result[1].skin)
+            TriggerClientEvent('mtj_kleidung:client:loadSkin', source, skin, false)
+        else
+            -- New player - needs character creation
+            TriggerClientEvent('mtj_kleidung:client:loadSkin', source, nil, true)
+        end
+    end)
+end)
+
+-- Save player skin to database
+RegisterNetEvent('mtj_kleidung:server:saveSkin')
+AddEventHandler('mtj_kleidung:server:saveSkin', function(skin)
+    local source = source
+    local identifier = GetPlayerIdentifier(source)
+    
+    if not identifier then
+        SendNotification(source, _U('error_occurred'), 'error')
+        return
+    end
+    
+    -- Validate skin data
+    if type(skin) ~= 'table' then
+        SendNotification(source, _U('invalid_outfit'), 'error')
+        return
+    end
+    
+    -- Check if player already has a skin
+    MySQL.Async.fetchAll('SELECT id FROM player_skin WHERE identifier = @identifier', {
+        ['@identifier'] = identifier
+    }, function(result)
+        if result and #result > 0 then
+            -- Update existing skin
+            MySQL.Async.execute('UPDATE player_skin SET skin = @skin WHERE identifier = @identifier', {
+                ['@identifier'] = identifier,
+                ['@skin'] = json.encode(skin)
+            }, function(affectedRows)
+                if affectedRows > 0 then
+                    if Config.EnableDebug then
+                        print('[MTJ2024_Kleidung] Skin updated for ' .. identifier)
+                    end
+                end
+            end)
+        else
+            -- Insert new skin
+            MySQL.Async.execute('INSERT INTO player_skin (identifier, skin) VALUES (@identifier, @skin)', {
+                ['@identifier'] = identifier,
+                ['@skin'] = json.encode(skin)
+            }, function(insertId)
+                if insertId > 0 then
+                    if Config.EnableDebug then
+                        print('[MTJ2024_Kleidung] Skin saved for ' .. identifier)
+                    end
+                end
+            end)
+        end
+    end)
+end)
+
 print('[MTJ2024_Kleidung] ^2Server side loaded successfully^0')

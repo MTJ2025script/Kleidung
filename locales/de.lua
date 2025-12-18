@@ -73,4 +73,11 @@ Locales['de'] = {
     ['payment_success'] = 'Du hast %s$ bezahlt',
     ['payment_failed'] = 'Zahlung fehlgeschlagen',
     ['insufficient_funds'] = 'Nicht genug Geld',
+    
+    -- Skin System
+    ['skin_saved'] = 'Aussehen gespeichert',
+    ['skin_loaded'] = 'Aussehen geladen',
+    ['character_creation'] = 'Charaktererstellung',
+    ['create_character'] = 'Erstelle deinen Charakter',
+    ['skin_menu'] = 'Aussehen anpassen',
 }
