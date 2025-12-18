@@ -1,5 +1,5 @@
 -- MTJ2024_Kleidung - Camera and 3D Preview System
--- Handles the rotating camera for player preview
+-- GARAGE STYLE: Static camera with rotating player (like car preview)
 
 local previewCamera = nil
 local isPreviewActive = false
@@ -9,7 +9,7 @@ local isPaused = false
 local cameraDistance = 2.5
 local cameraHeight = 0.5
 
--- Create preview camera
+-- Create preview camera (STATIC POSITION)
 function CreatePreviewCamera()
     if previewCamera then
         return
@@ -18,10 +18,18 @@ function CreatePreviewCamera()
     local playerPed = PlayerPedId()
     local pedCoords = GetEntityCoords(playerPed)
     
-    -- Create camera
+    -- Create camera at FIXED position in front of player
     previewCamera = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
     
-    -- Set camera properties
+    -- Set camera to fixed position (like garage view)
+    local camX = pedCoords.x + cameraDistance
+    local camY = pedCoords.y
+    local camZ = pedCoords.z + cameraHeight
+    
+    SetCamCoord(previewCamera, camX, camY, camZ)
+    PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
+    
+    -- Activate camera
     SetCamActive(previewCamera, true)
     RenderScriptCams(true, false, 0, true, true)
     
@@ -29,11 +37,11 @@ function CreatePreviewCamera()
     rotationAngle = 0.0
     isPaused = false
     
-    -- Start rotation thread
+    -- Start PLAYER rotation thread (not camera!)
     CreateThread(function()
         while isPreviewActive do
             if not isPaused then
-                UpdateCameraPosition()
+                RotatePlayer()
                 rotationAngle = rotationAngle + rotationSpeed
                 if rotationAngle >= 360.0 then
                     rotationAngle = 0.0
@@ -44,9 +52,9 @@ function CreatePreviewCamera()
     end)
 end
 
--- Update camera position based on rotation
-function UpdateCameraPosition()
-    if not previewCamera or not isPreviewActive then
+-- Rotate PLAYER (not camera!) - Garage Style
+function RotatePlayer()
+    if not isPreviewActive then
         return
     end
     
@@ -55,24 +63,8 @@ function UpdateCameraPosition()
         return
     end
     
-    local pedCoords = GetEntityCoords(playerPed)
-    
-    -- Calculate camera position in a circle around the player
-    local radians = math.rad(rotationAngle)
-    local camX = pedCoords.x + (math.cos(radians) * cameraDistance)
-    local camY = pedCoords.y + (math.sin(radians) * cameraDistance)
-    local camZ = pedCoords.z + cameraHeight
-    
-    -- Set camera position and point at player
-    SetCamCoord(previewCamera, camX, camY, camZ)
-    PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
-    
-    -- Make player face the opposite direction of camera for better view
-    -- Only update heading if camera is active
-    if isPreviewActive and not isPaused then
-        local heading = (rotationAngle + 180.0) % 360.0
-        SetEntityHeading(playerPed, heading)
-    end
+    -- Simply rotate the player's heading (like garage car rotation)
+    SetEntityHeading(playerPed, rotationAngle)
 end
 
 -- Destroy preview camera
@@ -91,7 +83,7 @@ function DestroyPreviewCamera()
         rotationAngle = 0.0
         
         -- Small delay to ensure camera is fully destroyed
-        Wait(100)
+        Wait(50)
     end
 end
 
@@ -115,6 +107,19 @@ end
 -- Set camera distance
 function SetCameraDistance(distance)
     cameraDistance = distance
+    
+    -- Update camera position if active
+    if previewCamera and isPreviewActive then
+        local playerPed = PlayerPedId()
+        local pedCoords = GetEntityCoords(playerPed)
+        
+        local camX = pedCoords.x + cameraDistance
+        local camY = pedCoords.y
+        local camZ = pedCoords.z + cameraHeight
+        
+        SetCamCoord(previewCamera, camX, camY, camZ)
+        PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
+    end
 end
 
 -- NUI Callbacks for camera controls
