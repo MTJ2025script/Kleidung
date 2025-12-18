@@ -279,6 +279,11 @@ function OpenClothingMenu(skipShopCheck)
     OriginalClothing = GetCurrentClothing()
     CurrentClothing = table.clone(OriginalClothing)
     
+    -- Freeze player and hide HUD
+    local playerPed = PlayerPedId()
+    FreezeEntityPosition(playerPed, true)
+    DisplayRadar(false)
+    
     -- Create preview camera
     CreatePreviewCamera()
     
@@ -383,6 +388,11 @@ RegisterNUICallback('closeMenu', function(data, cb)
     
     -- Destroy preview camera
     DestroyPreviewCamera()
+    
+    -- Unfreeze player and restore HUD
+    local playerPed = PlayerPedId()
+    FreezeEntityPosition(playerPed, false)
+    DisplayRadar(true)
     
     if data.save then
         -- Player wants to save changes

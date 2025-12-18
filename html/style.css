@@ -94,23 +94,18 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 
 .player-preview-side {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    background: transparent;
     border-right: 2px solid var(--primary-color);
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    pointer-events: none; /* Allow clicks to pass through to game */
 }
 
-/* Animated Background */
+/* Animated Background - REMOVED for transparent player view */
 .player-preview-side::before {
-    content: '';
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(0, 255, 0, 0.05) 0%, transparent 70%);
-    animation: rotate 20s linear infinite;
-    pointer-events: none;
+    display: none;
 }
 
 @keyframes rotate {
@@ -123,9 +118,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     border-bottom: 1px solid var(--border-color);
     z-index: 10;
+    pointer-events: auto; /* Allow clicks on header buttons */
 }
 
 .server-branding {
@@ -179,7 +175,7 @@ body {
     transform: scale(1.1);
 }
 
-/* 3D Player Model Display */
+/* 3D Player Model Display - Transparent to show game world */
 .player-model-display {
     flex: 1;
     position: relative;
@@ -187,6 +183,8 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 5;
+    background: transparent;
+    pointer-events: none;
 }
 
 .rotation-indicator {

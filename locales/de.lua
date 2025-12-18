@@ -41,7 +41,7 @@ Locales['de'] = {
     
     -- Notifications
     ['clothing_shop'] = 'Kleidungsgeschäft',
-    ['press_to_open'] = 'Drücke ~INPUT_CONTEXT~ um das Kleidungsmenü zu öffnen',
+    ['press_to_open'] = 'Drücke [E] um das Kleidungsmenü zu öffnen',
     ['not_in_shop'] = 'Du bist nicht in einem Kleidungsgeschäft',
     ['changes_applied'] = 'Änderungen wurden übernommen',
     ['changes_cancelled'] = 'Änderungen wurden abgebrochen',
