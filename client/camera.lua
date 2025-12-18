@@ -1,15 +1,14 @@
 -- MTJ2024_Kleidung - Camera and 3D Preview System
--- GARAGE STYLE: Static camera with rotating player (like car preview)
+-- ESX LEGACY STYLE: Static camera with rotating player
 
 local previewCamera = nil
 local isPreviewActive = false
 local rotationAngle = 0.0
 local rotationSpeed = 0.5
 local isPaused = false
-local cameraDistance = 2.5
-local cameraHeight = 0.5
+local rotationThread = nil
 
--- Create preview camera (STATIC POSITION)
+-- Create preview camera (ESX Legacy Style)
 function CreatePreviewCamera()
     if previewCamera then
         return
@@ -18,18 +17,18 @@ function CreatePreviewCamera()
     local playerPed = PlayerPedId()
     local pedCoords = GetEntityCoords(playerPed)
     
-    -- Create camera at FIXED position in front of player
+    -- Create camera at FIXED position
     previewCamera = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
     
-    -- Set camera to fixed position (like garage view)
-    local camX = pedCoords.x + cameraDistance
-    local camY = pedCoords.y
-    local camZ = pedCoords.z + cameraHeight
+    -- Position camera to show player on LEFT side of screen
+    -- Camera slightly to right and front of player
+    local camX = pedCoords.x + 2.0
+    local camY = pedCoords.y + 0.5
+    local camZ = pedCoords.z + 0.5
     
     SetCamCoord(previewCamera, camX, camY, camZ)
     PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
-    
-    -- Activate camera
+    SetCamFov(previewCamera, 50.0)
     SetCamActive(previewCamera, true)
     RenderScriptCams(true, false, 0, true, true)
     
@@ -37,53 +36,51 @@ function CreatePreviewCamera()
     rotationAngle = 0.0
     isPaused = false
     
-    -- Start PLAYER rotation thread (not camera!)
-    CreateThread(function()
+    -- Start player rotation
+    StartPlayerRotation()
+end
+
+-- Start player rotation thread
+function StartPlayerRotation()
+    if rotationThread then
+        return
+    end
+    
+    rotationThread = CreateThread(function()
         while isPreviewActive do
             if not isPaused then
-                RotatePlayer()
-                rotationAngle = rotationAngle + rotationSpeed
-                if rotationAngle >= 360.0 then
-                    rotationAngle = 0.0
+                local playerPed = PlayerPedId()
+                if DoesEntityExist(playerPed) then
+                    SetEntityHeading(playerPed, rotationAngle)
+                    rotationAngle = rotationAngle + rotationSpeed
+                    if rotationAngle >= 360.0 then
+                        rotationAngle = 0.0
+                    end
                 end
             end
             Wait(16) -- ~60 FPS
         end
+        rotationThread = nil
     end)
 end
 
--- Rotate PLAYER (not camera!) - Garage Style
-function RotatePlayer()
-    if not isPreviewActive then
-        return
-    end
-    
-    local playerPed = PlayerPedId()
-    if not DoesEntityExist(playerPed) then
-        return
-    end
-    
-    -- Simply rotate the player's heading (like garage car rotation)
-    SetEntityHeading(playerPed, rotationAngle)
+-- Stop player rotation
+function StopPlayerRotation()
+    isPreviewActive = false
+    isPaused = true
+    rotationAngle = 0.0
 end
 
 -- Destroy preview camera
 function DestroyPreviewCamera()
     if previewCamera then
-        -- Stop rotation immediately
-        isPreviewActive = false
-        isPaused = true
-        
-        -- Disable camera
+        -- Disable camera first
         RenderScriptCams(false, false, 0, true, true)
         DestroyCam(previewCamera, false)
         previewCamera = nil
         
-        -- Reset rotation angle
-        rotationAngle = 0.0
-        
-        -- Small delay to ensure camera is fully destroyed
-        Wait(50)
+        -- Small delay for cleanup
+        Wait(100)
     end
 end
 
@@ -99,49 +96,9 @@ function ResetCameraView()
     isPaused = false
 end
 
--- Set rotation speed
-function SetRotationSpeed(speed)
-    rotationSpeed = speed
-end
-
--- Set camera distance
-function SetCameraDistance(distance)
-    cameraDistance = distance
-    
-    -- Update camera position if active
-    if previewCamera and isPreviewActive then
-        local playerPed = PlayerPedId()
-        local pedCoords = GetEntityCoords(playerPed)
-        
-        local camX = pedCoords.x + cameraDistance
-        local camY = pedCoords.y
-        local camZ = pedCoords.z + cameraHeight
-        
-        SetCamCoord(previewCamera, camX, camY, camZ)
-        PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
-    end
-end
-
--- NUI Callbacks for camera controls
-RegisterNUICallback('pauseRotation', function(data, cb)
-    local paused = ToggleRotationPause()
-    cb({ paused = paused })
-end)
-
-RegisterNUICallback('resetView', function(data, cb)
-    ResetCameraView()
-    cb('ok')
-end)
-
-RegisterNUICallback('setCameraDistance', function(data, cb)
-    if data.distance then
-        SetCameraDistance(data.distance)
-    end
-    cb('ok')
-end)
-
 -- Export functions for use in main.lua
 exports('CreatePreviewCamera', CreatePreviewCamera)
 exports('DestroyPreviewCamera', DestroyPreviewCamera)
+exports('StopPlayerRotation', StopPlayerRotation)
 exports('ToggleRotationPause', ToggleRotationPause)
 exports('ResetCameraView', ResetCameraView)
