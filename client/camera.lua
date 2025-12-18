@@ -51,6 +51,10 @@ function UpdateCameraPosition()
     end
     
     local playerPed = PlayerPedId()
+    if not DoesEntityExist(playerPed) then
+        return
+    end
+    
     local pedCoords = GetEntityCoords(playerPed)
     
     -- Calculate camera position in a circle around the player
@@ -64,17 +68,30 @@ function UpdateCameraPosition()
     PointCamAtCoord(previewCamera, pedCoords.x, pedCoords.y, pedCoords.z + 0.7)
     
     -- Make player face the opposite direction of camera for better view
-    local heading = (rotationAngle + 180.0) % 360.0
-    SetEntityHeading(playerPed, heading)
+    -- Only update heading if camera is active
+    if isPreviewActive and not isPaused then
+        local heading = (rotationAngle + 180.0) % 360.0
+        SetEntityHeading(playerPed, heading)
+    end
 end
 
 -- Destroy preview camera
 function DestroyPreviewCamera()
     if previewCamera then
+        -- Stop rotation immediately
         isPreviewActive = false
+        isPaused = true
+        
+        -- Disable camera
         RenderScriptCams(false, false, 0, true, true)
         DestroyCam(previewCamera, false)
         previewCamera = nil
+        
+        -- Reset rotation angle
+        rotationAngle = 0.0
+        
+        -- Small delay to ensure camera is fully destroyed
+        Wait(100)
     end
 end
 

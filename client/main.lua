@@ -406,14 +406,18 @@ RegisterNUICallback('closeMenu', function(data, cb)
     MenuOpen = false
     SetNuiFocus(false, false)
     
-    -- Destroy preview camera
+    -- Destroy preview camera FIRST to stop rotation
     DestroyPreviewCamera()
+    
+    -- Wait for camera to be fully destroyed
+    Wait(150)
     
     local playerPed = PlayerPedId()
     
-    -- Restore original position and heading
+    -- Restore original position and heading AFTER camera is destroyed
     if OriginalPlayerCoords then
         SetEntityCoordsNoOffset(playerPed, OriginalPlayerCoords.x, OriginalPlayerCoords.y, OriginalPlayerCoords.z, false, false, false)
+        Wait(50)
         SetEntityHeading(playerPed, OriginalPlayerHeading)
         OriginalPlayerCoords = nil
         OriginalPlayerHeading = nil

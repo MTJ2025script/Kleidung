@@ -118,10 +118,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid var(--border-color);
     z-index: 10;
     pointer-events: auto; /* Allow clicks on header buttons */
+    backdrop-filter: blur(5px);
 }
 
 .server-branding {
@@ -193,10 +194,12 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.3);
     padding: 30px 50px;
     border-radius: 20px;
     border: 2px solid var(--primary-color);
+    backdrop-filter: blur(10px);
+    pointer-events: none;
 }
 
 .rotation-indicator i {
@@ -223,7 +226,7 @@ body {
     bottom: 50px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.3);
     padding: 15px 40px;
     border-radius: 50px;
     border: 2px solid var(--primary-color);
@@ -231,6 +234,8 @@ body {
     align-items: center;
     gap: 12px;
     box-shadow: 0 5px 30px rgba(0, 255, 0, 0.3);
+    backdrop-filter: blur(10px);
+    pointer-events: none;
 }
 
 .player-name-tag i {
@@ -249,9 +254,11 @@ body {
     display: flex;
     justify-content: center;
     gap: 30px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     border-top: 1px solid var(--border-color);
     z-index: 10;
+    backdrop-filter: blur(5px);
+    pointer-events: auto;
 }
 
 .info-badge {
@@ -259,9 +266,10 @@ body {
     align-items: center;
     gap: 10px;
     padding: 10px 20px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     border: 1px solid var(--border-color);
+    backdrop-filter: blur(5px);
 }
 
 .info-badge i {
