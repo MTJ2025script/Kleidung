@@ -268,6 +268,10 @@ function ApplyClothing(clothing)
     end
 end
 
+-- Store original player position
+local OriginalPlayerCoords = nil
+local OriginalPlayerHeading = nil
+
 -- Open clothing menu
 function OpenClothingMenu(skipShopCheck)
     -- Allow opening anywhere if using skin command or skip check
@@ -279,8 +283,24 @@ function OpenClothingMenu(skipShopCheck)
     OriginalClothing = GetCurrentClothing()
     CurrentClothing = table.clone(OriginalClothing)
     
-    -- Freeze player and hide HUD
     local playerPed = PlayerPedId()
+    
+    -- Save original position and heading
+    OriginalPlayerCoords = GetEntityCoords(playerPed)
+    OriginalPlayerHeading = GetEntityHeading(playerPed)
+    
+    -- Position player in front of camera for optimal view
+    -- This positions the player so they appear centered in the left column
+    local forwardVector = GetEntityForwardVector(playerPed)
+    local newX = OriginalPlayerCoords.x + (forwardVector.x * 2.0)
+    local newY = OriginalPlayerCoords.y + (forwardVector.y * 2.0)
+    local newZ = OriginalPlayerCoords.z
+    
+    -- Set player to new position for preview
+    SetEntityCoordsNoOffset(playerPed, newX, newY, newZ, false, false, false)
+    SetEntityHeading(playerPed, OriginalPlayerHeading)
+    
+    -- Freeze player and hide HUD
     FreezeEntityPosition(playerPed, true)
     DisplayRadar(false)
     
@@ -389,8 +409,17 @@ RegisterNUICallback('closeMenu', function(data, cb)
     -- Destroy preview camera
     DestroyPreviewCamera()
     
-    -- Unfreeze player and restore HUD
     local playerPed = PlayerPedId()
+    
+    -- Restore original position and heading
+    if OriginalPlayerCoords then
+        SetEntityCoordsNoOffset(playerPed, OriginalPlayerCoords.x, OriginalPlayerCoords.y, OriginalPlayerCoords.z, false, false, false)
+        SetEntityHeading(playerPed, OriginalPlayerHeading)
+        OriginalPlayerCoords = nil
+        OriginalPlayerHeading = nil
+    end
+    
+    -- Unfreeze player and restore HUD
     FreezeEntityPosition(playerPed, false)
     DisplayRadar(true)
     
