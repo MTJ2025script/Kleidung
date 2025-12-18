@@ -68,4 +68,9 @@ Locales['de'] = {
     ['invalid_outfit'] = 'Ungültiges Outfit',
     ['database_error'] = 'Datenbankfehler',
     ['permission_denied'] = 'Keine Berechtigung',
+    
+    -- Payment
+    ['payment_success'] = 'Du hast %s$ bezahlt',
+    ['payment_failed'] = 'Zahlung fehlgeschlagen',
+    ['insufficient_funds'] = 'Nicht genug Geld',
 }

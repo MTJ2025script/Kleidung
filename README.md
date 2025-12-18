@@ -42,6 +42,9 @@ Ein professionelles Kleidungsscript für FiveM RP-Server mit vollständiger ESX 
 - ESX Legacy ODER QB-Core Framework
 - oxmysql Resource
 - MySQL/MariaDB Datenbank
+- Internetverbindung für NUI (Font Awesome & jQuery CDN)*
+
+**Hinweis:** Das Script nutzt externe CDNs für Font Awesome und jQuery. Für maximale Sicherheit und Offline-Fähigkeit können diese lokal gehostet werden.
 
 ## 🚀 Installation
 

@@ -179,6 +179,20 @@ AddEventHandler('mtj_kleidung:server:saveOutfit', function(outfitName, outfitDat
         return
     end
     
+    -- Validate inputs
+    if type(outfitName) ~= 'string' or outfitName == '' then
+        SendNotification(source, _U('invalid_outfit'), 'error')
+        return
+    end
+    
+    if type(outfitData) ~= 'table' then
+        SendNotification(source, _U('invalid_outfit'), 'error')
+        return
+    end
+    
+    -- Sanitize outfit name (max 60 characters)
+    outfitName = string.sub(outfitName, 1, 60)
+    
     -- Check if outfit already exists
     MySQL.Async.fetchAll('SELECT * FROM player_outfits WHERE identifier = @identifier AND name = @name', {
         ['@identifier'] = identifier,
@@ -252,6 +266,26 @@ AddEventHandler('mtj_kleidung:server:processPayment', function(amount, paymentMe
         return
     end
     
+    -- Validate inputs
+    if type(amount) ~= 'number' or amount <= 0 or amount > 1000000 then
+        print('[MTJ2024_Kleidung] ^1Invalid payment amount from player ' .. source .. '^0')
+        TriggerClientEvent('mtj_kleidung:client:paymentResult', source, false, 'error_occurred')
+        return
+    end
+    
+    if paymentMethod ~= 'cash' and paymentMethod ~= 'bank' then
+        print('[MTJ2024_Kleidung] ^1Invalid payment method from player ' .. source .. '^0')
+        TriggerClientEvent('mtj_kleidung:client:paymentResult', source, false, 'error_occurred')
+        return
+    end
+    
+    if type(reason) ~= 'string' or reason == '' then
+        reason = 'clothing'
+    end
+    
+    -- Sanitize reason
+    reason = string.sub(reason, 1, 100)
+    
     -- Get player money
     local playerMoney = GetPlayerMoney(source, paymentMethod)
     
@@ -264,14 +298,14 @@ AddEventHandler('mtj_kleidung:server:processPayment', function(amount, paymentMe
             end
             
             TriggerClientEvent('mtj_kleidung:client:paymentResult', source, true, 'payment_success')
-            SendNotification(source, string.format('Du hast %s$ bezahlt', amount), 'success')
+            SendNotification(source, _U('payment_success', amount), 'success')
         else
             TriggerClientEvent('mtj_kleidung:client:paymentResult', source, false, 'payment_failed')
-            SendNotification(source, 'Zahlung fehlgeschlagen', 'error')
+            SendNotification(source, _U('payment_failed'), 'error')
         end
     else
         TriggerClientEvent('mtj_kleidung:client:paymentResult', source, false, 'insufficient_funds')
-        SendNotification(source, 'Nicht genug Geld', 'error')
+        SendNotification(source, _U('insufficient_funds'), 'error')
     end
 end)
 
