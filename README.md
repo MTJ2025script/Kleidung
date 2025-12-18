@@ -6,6 +6,22 @@
 
 Ein professionelles Kleidungsscript für FiveM RP-Server mit vollständiger ESX Legacy und QB-Core Unterstützung.
 
+## ⚠️ WICHTIG: Installation der Datenbank
+
+**VOR dem ersten Start MUSS die install.sql ausgeführt werden!**
+
+```bash
+mysql -u username -p database_name < resources/mtj_kleidung/install.sql
+```
+
+Oder via phpMyAdmin/HeidiSQL die `install.sql` importieren.
+
+Dies erstellt die benötigten Tabellen:
+- `player_outfits` - Speichert gespeicherte Outfits
+- `player_skin` - Speichert Spieler-Aussehen (für esx_skin Ersatz)
+
+**Ohne diese Tabellen wird das Script NICHT funktionieren!**
+
 ## 🌟 Features
 
 ### ⭐ ESX_Skin Ersatz

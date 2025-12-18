@@ -1,5 +1,9 @@
 # MTJ2024_Kleidung - Schnellstart-Anleitung
 
+## ⚠️ WICHTIG: Datenbank MUSS zuerst eingerichtet werden!
+
+**Das Script funktioniert NICHT ohne die Datenbanktabellen!**
+
 ## 🚀 5-Minuten Installation
 
 ### 1️⃣ Download & Entpacken
@@ -8,11 +12,16 @@ cd resources
 git clone https://github.com/MTJ2025script/Kleidung.git mtj_kleidung
 ```
 
-### 2️⃣ Datenbank Setup
+### 2️⃣ Datenbank Setup (ERFORDERLICH!)
 Führe `install.sql` aus:
 ```sql
 SOURCE resources/mtj_kleidung/install.sql;
 ```
+
+Oder via phpMyAdmin/HeidiSQL/MySQL Workbench:
+- Öffne deine Datenbank
+- Importiere `install.sql`
+- Überprüfe dass `player_outfits` und `player_skin` Tabellen erstellt wurden
 
 ### 3️⃣ server.cfg
 ```cfg

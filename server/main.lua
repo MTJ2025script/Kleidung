@@ -340,6 +340,7 @@ AddEventHandler('mtj_kleidung:server:loadSkin', function()
         return
     end
     
+    -- Check if player_skin table exists and query
     MySQL.Async.fetchAll('SELECT skin FROM player_skin WHERE identifier = @identifier', {
         ['@identifier'] = identifier
     }, function(result)
@@ -351,6 +352,13 @@ AddEventHandler('mtj_kleidung:server:loadSkin', function()
             -- New player - needs character creation
             TriggerClientEvent('mtj_kleidung:client:loadSkin', source, nil, true)
         end
+    end, function(error)
+        -- Database error - likely table doesn't exist
+        print('[MTJ2024_Kleidung] ^1DATABASE ERROR: ' .. error .. '^0')
+        print('[MTJ2024_Kleidung] ^3Please run install.sql to create the player_skin table!^0')
+        print('[MTJ2024_Kleidung] ^3Location: resources/mtj_kleidung/install.sql^0')
+        -- Still allow player to spawn with default skin
+        TriggerClientEvent('mtj_kleidung:client:loadSkin', source, nil, true)
     end)
 end)
 
@@ -386,6 +394,9 @@ AddEventHandler('mtj_kleidung:server:saveSkin', function(skin)
                         print('[MTJ2024_Kleidung] Skin updated for ' .. identifier)
                     end
                 end
+            end, function(error)
+                print('[MTJ2024_Kleidung] ^1ERROR saving skin: ' .. error .. '^0')
+                print('[MTJ2024_Kleidung] ^3Please run install.sql to create the player_skin table!^0')
             end)
         else
             -- Insert new skin
@@ -398,8 +409,14 @@ AddEventHandler('mtj_kleidung:server:saveSkin', function(skin)
                         print('[MTJ2024_Kleidung] Skin saved for ' .. identifier)
                     end
                 end
+            end, function(error)
+                print('[MTJ2024_Kleidung] ^1ERROR saving skin: ' .. error .. '^0')
+                print('[MTJ2024_Kleidung] ^3Please run install.sql to create the player_skin table!^0')
             end)
         end
+    end, function(error)
+        print('[MTJ2024_Kleidung] ^1ERROR checking skin: ' .. error .. '^0')
+        print('[MTJ2024_Kleidung] ^3Please run install.sql to create the player_skin table!^0')
     end)
 end)
 
