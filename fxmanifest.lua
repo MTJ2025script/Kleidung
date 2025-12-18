@@ -9,7 +9,10 @@ lua54 'yes'
 
 shared_scripts {
     'config.lua',
-    'locales/*.lua'
+    'locales/init.lua',
+    'locales/de.lua',
+    'locales/en.lua',
+    'locales/fr.lua'
 }
 
 client_scripts {
