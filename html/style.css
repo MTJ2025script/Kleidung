@@ -52,10 +52,10 @@ body {
 #app {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    right: 0;  /* RIGHT SIDE ONLY! */
+    width: 40vw;  /* ONLY 40% width! */
     height: 100vh;
-    background: transparent;
+    background: rgba(10, 10, 10, 0.95);  /* Solid background for readability */
     z-index: 9999;
     animation: fadeIn 0.3s ease;
 }
@@ -72,8 +72,8 @@ body {
 .ui-container {
     width: 100%;
     height: 100%;
-    display: grid;
-    grid-template-columns: 50% 50%;
+    display: flex;
+    flex-direction: column;
     animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -93,11 +93,8 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 
 .player-preview-side {
-    background: transparent;
-    border-right: 2px solid var(--primary-color);
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    display: none;  /* NO LEFT SIDE - Player visible through game world */
+}
     overflow: hidden;
     pointer-events: none; /* Allow clicks to pass through to game */
 }
@@ -286,10 +283,12 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 
 .controls-side {
-    background: var(--bg-dark);
+    background: transparent;  /* Background already set in #app */
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 /* Top Bar */
