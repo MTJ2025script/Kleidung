@@ -7,7 +7,6 @@ let savedOutfits = [];
 let jobUniforms = [];
 let playerBalance = { cash: 0, bank: 0 };
 let discount = 0;
-let isRotating = true;
 
 // Clothing Categories with Icons and Names
 const clothingCategories = {
@@ -402,27 +401,27 @@ function saveChanges() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// CAMERA CONTROLS
+// CAMERA CONTROLS - 3 VIEW SYSTEM (NO ROTATION)
 // ═══════════════════════════════════════════════════════════════
 
-$('#pauseRotation').click(function() {
-    isRotating = !isRotating;
+function switchCameraView(view) {
+    // Update UI buttons
+    $('.view-btn').removeClass('active');
+    $(`.view-btn[data-view="${view}"]`).addClass('active');
     
-    if (isRotating) {
-        $(this).html('<i class="fas fa-pause"></i>');
-        $('.rotation-indicator i').addClass('fa-spin');
-    } else {
-        $(this).html('<i class="fas fa-play"></i>');
-        $('.rotation-indicator i').removeClass('fa-spin');
-    }
-    
-    $.post('https://mtj_kleidung/toggleRotation', JSON.stringify({
-        rotate: isRotating
+    // Send to Lua
+    $.post('https://mtj_kleidung/switchView', JSON.stringify({
+        view: view
     }));
-});
+}
 
-$('#resetView').click(function() {
-    $.post('https://mtj_kleidung/resetCamera', JSON.stringify({}));
+// Keyboard shortcuts for camera views
+$(document).keyup(function(e) {
+    if ($('#app').hasClass('hidden')) return;
+    
+    if (e.key === '1') switchCameraView('front');
+    if (e.key === '2') switchCameraView('left');
+    if (e.key === '3') switchCameraView('right');
 });
 
 // ═══════════════════════════════════════════════════════════════

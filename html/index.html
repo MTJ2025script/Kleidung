@@ -13,46 +13,9 @@
         <!-- Split Layout: Left = Player Preview, Right = Controls -->
         <div class="ui-container">
             
-            <!-- LEFT SIDE: 3D Player Preview (FULLSCREEN) -->
+            <!-- LEFT SIDE: 3D Player Preview (GAME WORLD - NO HTML ELEMENTS) -->
             <div class="player-preview-side">
-                <div class="preview-header">
-                    <div class="server-branding">
-                        <i class="fas fa-leaf"></i>
-                        <span class="server-name">GreenZone420</span>
-                    </div>
-                    <div class="preview-controls">
-                        <button class="control-btn" id="pauseRotation" title="Rotation stoppen">
-                            <i class="fas fa-pause"></i>
-                        </button>
-                        <button class="control-btn" id="resetView" title="Ansicht zurücksetzen">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- 3D Player Model Display Area -->
-                <div class="player-model-display" id="playerModel">
-                    <div class="rotation-indicator">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>360° Ansicht aktiv</span>
-                    </div>
-                    <div class="player-name-tag" id="playerNameTag">
-                        <i class="fas fa-user"></i>
-                        <span id="playerDisplayName">Max Mustermann</span>
-                    </div>
-                </div>
-                
-                <!-- Preview Footer with Info -->
-                <div class="preview-footer">
-                    <div class="info-badge">
-                        <i class="fas fa-eye"></i>
-                        <span>Live Vorschau</span>
-                    </div>
-                    <div class="info-badge">
-                        <i class="fas fa-rotate"></i>
-                        <span>Automatische Rotation</span>
-                    </div>
-                </div>
+                <!-- Player visible through game world - NO HTML elements needed -->
             </div>
             
             <!-- RIGHT SIDE: Controls & Selection -->
@@ -87,6 +50,22 @@
                 <div class="discount-banner hidden" id="discountBanner">
                     <i class="fas fa-tag"></i>
                     <span id="discountText">VIP Rabatt: 50% auf alle Kleidung!</span>
+                </div>
+                
+                <!-- Camera View Controls (NO ROTATION) -->
+                <div class="camera-view-controls">
+                    <button class="view-btn active" data-view="front" onclick="switchCameraView('front')">
+                        <i class="fas fa-user"></i>
+                        <span>Vorne</span>
+                    </button>
+                    <button class="view-btn" data-view="left" onclick="switchCameraView('left')">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Links</span>
+                    </button>
+                    <button class="view-btn" data-view="right" onclick="switchCameraView('right')">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Rechts</span>
+                    </button>
                 </div>
                 
                 <!-- Tab Navigation -->
