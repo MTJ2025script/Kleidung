@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTJ2024 Kleidung</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+    <div id="app" class="hidden">
+        <div class="clothing-menu">
+            <!-- Header -->
+            <div class="menu-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-tshirt"></i>
+                        <span>MTJ2024 Kleidung</span>
+                    </div>
+                    <div class="player-balance">
+                        <div class="balance-item cash">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span id="cashBalance">0</span>$
+                        </div>
+                        <div class="balance-item bank">
+                            <i class="fas fa-university"></i>
+                            <span id="bankBalance">0</span>$
+                        </div>
+                    </div>
+                    <button class="close-btn" onclick="closeMenu(false)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="discount-banner" id="discountBanner" style="display: none;">
+                    <i class="fas fa-tag"></i>
+                    <span id="discountText"></span>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="menu-content">
+                <!-- Sidebar Navigation -->
+                <div class="sidebar">
+                    <div class="nav-tabs">
+                        <button class="tab-btn active" data-tab="clothing" onclick="switchTab('clothing')">
+                            <i class="fas fa-tshirt"></i>
+                            <span>Kleidung</span>
+                        </button>
+                        <button class="tab-btn" data-tab="outfits" onclick="switchTab('outfits')">
+                            <i class="fas fa-save"></i>
+                            <span>Outfits</span>
+                        </button>
+                        <button class="tab-btn" data-tab="role" onclick="switchTab('role')">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Berufs-Outfits</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Panels -->
+                <div class="content-area">
+                    <!-- Clothing Tab -->
+                    <div class="tab-content active" id="clothing-tab">
+                        <div class="clothing-layout">
+                            <!-- Left Side - 3D Preview -->
+                            <div class="preview-section">
+                                <div class="preview-container">
+                                    <div class="preview-header">
+                                        <h3><i class="fas fa-user"></i> Live-Vorschau</h3>
+                                        <div class="preview-controls">
+                                            <button class="preview-control-btn" id="pauseRotation" title="Rotation pausieren">
+                                                <i class="fas fa-pause"></i>
+                                            </button>
+                                            <button class="preview-control-btn" id="resetView" title="Ansicht zurücksetzen">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="player-preview-3d" id="playerPreview3D">
+                                        <div class="rotation-indicator">
+                                            <i class="fas fa-sync-alt fa-spin"></i>
+                                            <span>360° Ansicht</span>
+                                        </div>
+                                    </div>
+                                    <div class="preview-info">
+                                        <div class="info-item">
+                                            <i class="fas fa-rotate"></i>
+                                            <span>Automatische Rotation</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <i class="fas fa-eye"></i>
+                                            <span>Echtzeit-Vorschau</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right Side - Categories and Selection -->
+                            <div class="selection-section">
+                                <div class="clothing-categories">
+                                    <h2><i class="fas fa-th-large"></i> Kleidungskategorien</h2>
+                                    <div class="category-grid" id="categoryGrid">
+                                        <!-- Categories will be populated by JS -->
+                                    </div>
+                                </div>
+                                <div class="clothing-selection" id="clothingSelection">
+                                    <!-- Clothing items will be shown here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outfits Tab -->
+                    <div class="tab-content" id="outfits-tab">
+                        <div class="outfits-header">
+                            <h2>Gespeicherte Outfits</h2>
+                            <button class="btn btn-primary" onclick="showSaveOutfitDialog()">
+                                <i class="fas fa-plus"></i> Neues Outfit
+                            </button>
+                        </div>
+                        <div class="outfits-grid" id="outfitsGrid">
+                            <!-- Outfits will be populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Role Outfits Tab -->
+                    <div class="tab-content" id="role-tab">
+                        <h2>Berufs-Outfits</h2>
+                        <div class="role-outfits-grid" id="roleOutfitsGrid">
+                            <!-- Role outfits will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer with Actions -->
+            <div class="menu-footer">
+                <div class="cost-info" id="costInfo">
+                    <div class="cost-breakdown">
+                        <span class="cost-label">Kosten:</span>
+                        <span class="cost-amount" id="totalCost">0</span>$
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="closeMenu(false)">
+                        <i class="fas fa-times"></i> Abbrechen
+                    </button>
+                    <button class="btn btn-primary" id="applyBtn" onclick="showPaymentDialog()">
+                        <i class="fas fa-check"></i> Übernehmen & Bezahlen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Dialog -->
+        <div class="modal" id="paymentModal">
+            <div class="modal-content payment-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-credit-card"></i> Zahlungsmethode wählen</h3>
+                    <button class="close-modal" onclick="closePaymentDialog()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-info">
+                        <div class="payment-amount">
+                            <span>Zu zahlen:</span>
+                            <span class="amount" id="paymentAmount">0</span>$
+                        </div>
+                        <div class="payment-reason" id="paymentReason">
+                            Kleidungsänderung
+                        </div>
+                    </div>
+                    <div class="payment-methods">
+                        <button class="payment-method-btn" id="cashPaymentBtn" onclick="processPayment('cash')">
+                            <div class="method-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="method-info">
+                                <span class="method-name">Bargeld</span>
+                                <span class="method-balance" id="cashPaymentBalance">0$</span>
+                            </div>
+                            <div class="method-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </button>
+                        <button class="payment-method-btn" id="bankPaymentBtn" onclick="processPayment('bank')">
+                            <div class="method-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="method-info">
+                                <span class="method-name">Bankkonto</span>
+                                <span class="method-balance" id="bankPaymentBalance">0$</span>
+                            </div>
+                            <div class="method-check">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Outfit Dialog -->
+        <div class="modal" id="saveOutfitModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-save"></i> Outfit speichern</h3>
+                    <button class="close-modal" onclick="closeSaveOutfitDialog()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="outfitName">Outfit Name</label>
+                        <input type="text" id="outfitName" placeholder="Gib einen Namen ein..." maxlength="30">
+                    </div>
+                    <div class="save-outfit-cost">
+                        <span>Kosten:</span>
+                        <span id="saveOutfitCost">50</span>$
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeSaveOutfitDialog()">Abbrechen</button>
+                    <button class="btn btn-primary" onclick="saveOutfit()">
+                        <i class="fas fa-save"></i> Speichern
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div class="notification" id="notification">
+            <i class="fas fa-info-circle"></i>
+            <span id="notificationText"></span>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>

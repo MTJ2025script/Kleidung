@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenZone420 Kleidung</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+    <!-- Fullscreen UI -->
+    <div id="app" class="hidden">
+        <!-- Split Layout: Left = Player Preview, Right = Controls -->
+        <div class="ui-container">
+            
+            <!-- LEFT SIDE: 3D Player Preview (GAME WORLD - NO HTML ELEMENTS) -->
+            <div class="player-preview-side">
+                <!-- Player visible through game world - NO HTML elements needed -->
+            </div>
+            
+            <!-- RIGHT SIDE: Controls & Selection -->
+            <div class="controls-side">
+                
+                <!-- Top Bar -->
+                <div class="top-bar">
+                    <div class="balance-display">
+                        <div class="balance-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <div class="balance-info">
+                                <span class="balance-label">Bargeld</span>
+                                <span class="balance-amount" id="cashBalance">$0</span>
+                            </div>
+                        </div>
+                        <div class="balance-divider"></div>
+                        <div class="balance-item">
+                            <i class="fas fa-university"></i>
+                            <div class="balance-info">
+                                <span class="balance-label">Bank</span>
+                                <span class="balance-amount" id="bankBalance">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="close-button" onclick="closeMenu(false)">
+                        <i class="fas fa-times"></i>
+                        <span>Schließen</span>
+                    </button>
+                </div>
+                
+                <!-- Discount Banner (if applicable) -->
+                <div class="discount-banner hidden" id="discountBanner">
+                    <i class="fas fa-tag"></i>
+                    <span id="discountText">VIP Rabatt: 50% auf alle Kleidung!</span>
+                </div>
+                
+                <!-- Camera View Controls (NO ROTATION) -->
+                <div class="camera-view-controls">
+                    <button class="view-btn active" data-view="front" onclick="switchCameraView('front')">
+                        <i class="fas fa-user"></i>
+                        <span>Vorne</span>
+                    </button>
+                    <button class="view-btn" data-view="left" onclick="switchCameraView('left')">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Links</span>
+                    </button>
+                    <button class="view-btn" data-view="right" onclick="switchCameraView('right')">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Rechts</span>
+                    </button>
+                </div>
+                
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-btn active" data-tab="clothing" onclick="switchTab('clothing')">
+                        <i class="fas fa-tshirt"></i>
+                        <span>Kleidung</span>
+                    </button>
+                    <button class="tab-btn" data-tab="outfits" onclick="switchTab('outfits')">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Gespeicherte Outfits</span>
+                    </button>
+                    <button class="tab-btn" data-tab="uniforms" onclick="switchTab('uniforms')">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Berufs-Uniformen</span>
+                    </button>
+                </div>
+                
+                <!-- Content Area (Scrollable Lists) -->
+                <div class="content-area">
+                    
+                    <!-- CLOTHING TAB -->
+                    <div class="tab-content active" id="clothing-tab">
+                        <!-- Category Selector -->
+                        <div class="category-selector">
+                            <button class="category-chip active" data-category="all">
+                                <i class="fas fa-th"></i>
+                                Alle Kategorien
+                            </button>
+                            <button class="category-chip" data-category="tops">
+                                <i class="fas fa-shirt"></i>
+                                Oberteile
+                            </button>
+                            <button class="category-chip" data-category="pants">
+                                <i class="fas fa-person"></i>
+                                Hosen
+                            </button>
+                            <button class="category-chip" data-category="shoes">
+                                <i class="fas fa-socks"></i>
+                                Schuhe
+                            </button>
+                            <button class="category-chip" data-category="accessories">
+                                <i class="fas fa-glasses"></i>
+                                Accessoires
+                            </button>
+                            <button class="category-chip" data-category="masks">
+                                <i class="fas fa-mask"></i>
+                                Masken
+                            </button>
+                        </div>
+                        
+                        <!-- Item List (Scrollable) -->
+                        <div class="item-list" id="clothingList">
+                            <!-- Example Items (will be generated by JS) -->
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-tshirt"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Unterhemd</h4>
+                                    <p class="item-description">Wähle dein Unterhemd</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">1 / 15</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>25</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-shirt"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Oberteil / Jacke</h4>
+                                    <p class="item-description">Dein Style, deine Wahl</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">5 / 120</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>50</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-person"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Hose</h4>
+                                    <p class="item-description">Jeans, Anzughose oder Sport</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">12 / 80</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>40</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-socks"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Schuhe</h4>
+                                    <p class="item-description">Sneaker, Stiefel oder Elegant</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">8 / 45</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>35</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-mask"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Maske</h4>
+                                    <p class="item-description">Für Anonymität oder Style</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">0 / 60</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>50</span>
+                                </div>
+                            </div>
+                            
+                            <div class="item-card">
+                                <div class="item-icon">
+                                    <i class="fas fa-glasses"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Brille</h4>
+                                    <p class="item-description">Sonnenbrille oder stylish</p>
+                                </div>
+                                <div class="item-controls">
+                                    <button class="item-control-btn prev">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="item-value">3 / 25</span>
+                                    <button class="item-control-btn next">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="item-price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- OUTFITS TAB -->
+                    <div class="tab-content" id="outfits-tab">
+                        <div class="outfit-actions">
+                            <button class="action-button primary" onclick="saveOutfit()">
+                                <i class="fas fa-save"></i>
+                                <span>Aktuelles Outfit speichern</span>
+                            </button>
+                        </div>
+                        
+                        <div class="item-list" id="outfitsList">
+                            <!-- Saved outfits will be listed here -->
+                            <div class="item-card outfit-item">
+                                <div class="item-icon">
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Casual Freitag</h4>
+                                    <p class="item-description">Gespeichert am 18.12.2025</p>
+                                </div>
+                                <div class="outfit-buttons">
+                                    <button class="action-btn load-btn">
+                                        <i class="fas fa-download"></i>
+                                        Laden
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="empty-state" style="display: none;">
+                                <i class="fas fa-bookmark"></i>
+                                <h3>Keine gespeicherten Outfits</h3>
+                                <p>Speichere dein erstes Outfit!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- UNIFORMS TAB -->
+                    <div class="tab-content" id="uniforms-tab">
+                        <div class="item-list" id="uniformsList">
+                            <!-- Job uniforms will be listed here -->
+                            <div class="item-card uniform-item">
+                                <div class="item-icon police">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="item-details">
+                                    <h4 class="item-name">Streifenpolizist</h4>
+                                    <p class="item-description">Offizielle LSPD Uniform</p>
+                                </div>
+                                <button class="action-btn apply-btn">
+                                    <i class="fas fa-check"></i>
+                                    Anziehen
+                                </button>
+                            </div>
+                            
+                            <div class="empty-state" style="display: none;">
+                                <i class="fas fa-briefcase"></i>
+                                <h3>Keine Uniformen verfügbar</h3>
+                                <p>Für deinen aktuellen Job gibt es keine Uniformen.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Action Footer -->
+                <div class="action-footer">
+                    <button class="action-button secondary" onclick="closeMenu(false)">
+                        <i class="fas fa-times"></i>
+                        <span>Abbrechen</span>
+                    </button>
+                    <button class="action-button primary" onclick="saveChanges()">
+                        <i class="fas fa-check"></i>
+                        <span>Änderungen speichern</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>

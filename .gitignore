@@ -1,0 +1,38 @@
+# FiveM
+*.log
+cache/
+crashes/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temp files
+*.tmp
+*.temp
+~*
+
+# Node modules (if any)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Database backups
+*.sql.backup
+backup/
+
+# Config overrides (if you want to keep personal configs private)
+# config.lua
+
+# Screenshots/testing
+screenshots/
+test_*.lua

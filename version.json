@@ -1,0 +1,52 @@
+{
+    "name": "MTJ2024_Kleidung",
+    "version": "1.0.0",
+    "description": "Professional FiveM Clothing Script with Payment System and 3D Preview",
+    "author": "MTJ2025",
+    "repository": "https://github.com/MTJ2025script/Kleidung",
+    "license": "MIT",
+    "features": [
+        "ESX Legacy Support",
+        "QB-Core Support",
+        "Automatic Framework Detection",
+        "3D Rotating Player Preview",
+        "Payment System (Cash/Bank)",
+        "Job-based Discounts",
+        "Outfit Management",
+        "Role-based Outfits",
+        "Multi-language Support",
+        "Modern NUI Interface",
+        "MySQL Database Integration"
+    ],
+    "languages": [
+        "de",
+        "en",
+        "fr"
+    ],
+    "dependencies": {
+        "required": [
+            "oxmysql"
+        ],
+        "optional": [
+            "es_extended",
+            "qb-core"
+        ]
+    },
+    "changelog": {
+        "1.0.0": {
+            "date": "2024-12-18",
+            "changes": [
+                "Initial release",
+                "Added ESX Legacy and QB-Core support",
+                "Implemented 3D rotating player preview",
+                "Added payment system with cash and bank options",
+                "Implemented outfit management system",
+                "Added role-based outfits for jobs",
+                "Created multi-language support (DE/EN/FR)",
+                "Designed modern NUI with glassmorphism",
+                "Integrated MySQL database for outfit storage",
+                "Added job-based discount system"
+            ]
+        }
+    }
+}
