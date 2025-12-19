@@ -403,18 +403,20 @@ end
 
 -- NUI Callbacks
 RegisterNUICallback('closeMenu', function(data, cb)
+    cb('ok')  -- Respond immediately
+    
     MenuOpen = false
-    SetNuiFocus(false, false)
-    
-    -- Destroy preview camera FIRST to stop rotation
-    DestroyPreviewCamera()
-    
-    -- Wait for camera to be fully destroyed
-    Wait(150)
-    
     local playerPed = PlayerPedId()
     
-    -- Restore original position and heading AFTER camera is destroyed
+    -- Step 1: Remove NUI focus
+    SetNuiFocus(false, false)
+    Wait(50)
+    
+    -- Step 2: Destroy camera
+    DestroyPreviewCamera()
+    Wait(100)
+    
+    -- Step 3: Restore player position
     if OriginalPlayerCoords then
         SetEntityCoordsNoOffset(playerPed, OriginalPlayerCoords.x, OriginalPlayerCoords.y, OriginalPlayerCoords.z, false, false, false)
         Wait(50)
@@ -423,27 +425,28 @@ RegisterNUICallback('closeMenu', function(data, cb)
         OriginalPlayerHeading = nil
     end
     
-    -- Unfreeze player and restore HUD
+    -- Step 4: Unfreeze player LAST
     FreezeEntityPosition(playerPed, false)
     DisplayRadar(true)
     
+    -- Handle save/revert
     if data.save then
-        -- Player wants to save changes
-        if Config.EnablePayment and not PendingPayment then
-            -- Already paid or free
-            ApplyClothing(CurrentClothing)
-            
-            -- Save skin to database if skin system is enabled
-            if Config.EnableSkinSystem and Config.SaveSkinOnChange then
-                TriggerServerEvent('mtj_kleidung:server:saveSkin', CurrentClothing)
-            end
+        ApplyClothing(CurrentClothing)
+        if Config.EnableSkinSystem and Config.SaveSkinOnChange then
+            TriggerServerEvent('mtj_kleidung:server:saveSkin', CurrentClothing)
         end
     else
-        -- Revert changes
         ApplyClothing(OriginalClothing)
     end
     
     PendingPayment = false
+end)
+
+-- Switch camera view
+RegisterNUICallback('switchView', function(data, cb)
+    if data.view then
+        exports['mtj_kleidung']:SwitchCameraView(data.view)
+    end
     cb('ok')
 end)
 
